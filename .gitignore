@@ -4,4 +4,4 @@
 __pycache__
 .idea
 dist
-base.egg-info
+myutil.egg-info
