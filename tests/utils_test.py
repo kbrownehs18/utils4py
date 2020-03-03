@@ -5,7 +5,7 @@ import logging
 import time
 import unittest
 
-from myutil import utils
+from utils4py import utils
 
 
 class TestUtils(unittest.TestCase):
