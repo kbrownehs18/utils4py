@@ -5,7 +5,7 @@ setup(
     name='utils4py',
     version='0.0.1',
     packages=find_packages(),
-    url='https://github.com/LastSync/myutil',
+    url='https://github.com/LastSync/utils4py',
     license='MPL',
     author='last911',
     author_email='scnjl@qq.com',
