@@ -1,0 +1,7 @@
+.DS_Store
+.editorconfig
+.vscode
+__pycache__
+.idea
+dist
+base.egg-info
