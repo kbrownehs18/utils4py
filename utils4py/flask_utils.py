@@ -25,3 +25,20 @@ class CustomJSONEncoder(JSONEncoder):
             return list(iterable)
 
         return JSONEncoder.default(self, obj)
+
+
+def response(code=0, data={}, msg="", http_code=200, **kwargs):
+    """
+    return flask json response
+    """
+    rtn = {"code": code}
+    if data:
+        rtn["data"] = data
+
+    if msg:
+        rtn["msg"] = msg
+
+    if kwargs:
+        rtn = rtn.update(kwargs)
+
+    return jsonify(rtn), http_code
