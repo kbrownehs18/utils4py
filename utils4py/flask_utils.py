@@ -60,4 +60,4 @@ class Form(FlaskForm):
         return first error message
         """
         messages = get_items(self.errors)
-        return None if messages else messages[0]
+        return None if not messages else messages[0]
