@@ -130,3 +130,25 @@ def decrypt(content, key="1234567890"):
     plaintext = cryptor.decrypt(ciphertext).decode()
 
     return plaintext.rstrip(chr(0))
+
+
+def get_items(items) -> list:
+    """
+    get all items
+    """
+
+    def calculate(lst):
+        t = type(lst)
+        if t in [list, tuple]:
+            for item in lst:
+                calculate(item)
+        elif t == dict:
+            for _, item in lst.items():
+                calculate(item)
+        else:
+            result.append(lst)
+            return
+
+    result = []
+    calculate(items)
+    return result

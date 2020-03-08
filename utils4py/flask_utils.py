@@ -7,6 +7,8 @@ from flask import jsonify, request
 from flask.json import JSONEncoder
 from flask_wtf import FlaskForm
 
+from .utils import get_items
+
 
 class CustomJSONEncoder(JSONEncoder):
     """
@@ -57,6 +59,5 @@ class Form(FlaskForm):
         """
         return first error message
         """
-        messages = [for item in [v for _, v in self.errors.items()]]
-        for m in messages:
-            return m
+        messages = get_items(self.errors)
+        return None if messages else messages[0]

@@ -42,6 +42,24 @@ class TestUtils(unittest.TestCase):
 
         self.assertEqual(en == utils.md5("abc"), True)
 
+    def test_get_items(self):
+        m = {"name": "scnjl", "age": 40}
+        print(utils.get_items(m))
+
+        errors = {"password": ["请输入密码"], "username": ["请输入用户名"]}
+        print(utils.get_items(errors))
+
+        a = [
+            [(55736,)],
+            [(55739,)],
+            [(55740,), (55801,)],
+            [(55748,)],
+            [(55783,), (55786,), (55787,), (55788,)],
+            [(55817,), (55821,)],
+            [(55818,)],
+        ]
+        print(utils.get_items(a))
+
 
 if __name__ == "__main__":
     unittest.main()
