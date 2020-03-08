@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='utils4py',
-    version='0.0.6',
+    version='0.0.7',
     packages=find_packages(),
     url='https://github.com/kbrownehs18/utils4py',
     license='MPL',

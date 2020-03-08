@@ -92,7 +92,11 @@ def random_string(len=5):
     return "".join(chars)
 
 
-pad = lambda s: s + (AES.block_size - len(s) % AES.block_size) * chr(0)
+pad = (
+    lambda s: s[0 : AES.block_size]
+    if len(s) >= AES.block_size
+    else (s + (AES.block_size - len(s) % AES.block_size) * chr(0))
+)
 
 
 def encrypt(content, key="1234567890", expires=0):
