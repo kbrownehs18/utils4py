@@ -12,6 +12,7 @@ setup(
     description='Python tools',
     install_requires=[
         'sqlalchemy',
-        'pycrypto'
+        'pycrypto',
+        "flask-wtf"
     ]
 )

@@ -3,8 +3,9 @@
 
 from datetime import date, datetime
 
-from flask import jsonify
+from flask import jsonify, request
 from flask.json import JSONEncoder
+from flask_wtf import FlaskForm
 
 
 class CustomJSONEncoder(JSONEncoder):
@@ -42,3 +43,20 @@ def response(code=0, data={}, msg="", http_code=200, **kwargs):
         rtn = rtn.update(kwargs)
 
     return jsonify(rtn), http_code
+
+
+def get_json(force=True, silent=True, cache=True):
+    """
+    wrap flask request get_json
+    """
+    return request.get_json(force=force, silent=silent, cache=cache)
+
+
+class Form(FlaskForm):
+    def get_error_message(self):
+        """
+        return first error message
+        """
+        messages = [for item in [v for _, v in self.errors.items()]]
+        for m in messages:
+            return m
