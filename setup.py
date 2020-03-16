@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='utils4py',
-    version='0.0.7',
+    version='0.0.8',
     packages=find_packages(),
     url='https://github.com/kbrownehs18/utils4py',
     license='MPL',
@@ -13,6 +13,7 @@ setup(
     install_requires=[
         'sqlalchemy',
         'pycrypto',
-        "flask-wtf"
+        "flask-wtf",
+        "pillow"
     ]
 )

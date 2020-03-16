@@ -9,10 +9,11 @@ import os
 import random
 import re
 import time
-from binascii import a2b_hex, b2a_hex
+from io import BytesIO
 
 from Crypto import Random
 from Crypto.Cipher import AES
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 from sqlalchemy import Date, DateTime, Numeric
 
 
@@ -49,9 +50,7 @@ def check_phone_number(phone_number):
     """
     check if the phone number valid
     """
-    return (
-        True if re.compile(r"^1(3|4|5|6|7|8|9)[\d]{9}$").match(phone_number) else False
-    )
+    return True if re.match("^1[3-9]{1}[0-9]{9}$", phone_number) else False
 
 
 def model_to_dict(model):
@@ -156,3 +155,49 @@ def get_items(items) -> list:
     result = []
     calculate(items)
     return result
+
+
+def captcha(size=4, width=240, height=60, font=None, font_size=36):
+    """
+    验证码
+    @param width default: 240
+    @param height default: 60
+    """
+    image = Image.new("RGB", (width, height), (255, 255, 255))
+    font = ImageFont.truetype(font=font if font else "./Arial.ttf", size=font_size)
+    draw = ImageDraw.Draw(image)
+    for x in range(width):
+        for y in range(height):
+            draw.point(
+                (x, y),
+                fill=(
+                    random.randint(64, 255),
+                    random.randint(64, 255),
+                    random.randint(64, 255),
+                ),
+            )
+    code = []
+    remainder = width % size
+    unit = int((width - remainder) / size)
+    y = int((height - font_size) / 2)
+    offset_x = int(remainder / 2)
+    for t in range(size):
+        c = random_string(1)
+        code.append(c)
+        draw.text(
+            (unit * t + offset_x, y),
+            c,
+            font=font,
+            fill=(
+                random.randint(32, 127),
+                random.randint(32, 127),
+                random.randint(32, 127),
+            ),
+        )
+    image = image.filter(ImageFilter.BLUR)
+
+    img_io = BytesIO()
+    image.save(img_io, "PNG")
+    img_io.seek(0)
+
+    return "".join(code), img_io

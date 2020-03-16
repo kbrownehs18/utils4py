@@ -59,6 +59,11 @@ class TestUtils(unittest.TestCase):
             [(55818,)],
         ]
         print(utils.get_items(a))
+    
+    def test_captcha(self):
+        r, img = utils.captcha()
+
+        print(r, img)
 
 
 if __name__ == "__main__":
