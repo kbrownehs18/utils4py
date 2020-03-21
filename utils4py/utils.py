@@ -188,6 +188,7 @@ def captcha(size=4, width=240, height=60, font=None, font_size=36):
             (unit * t + offset_x, y),
             c,
             font=font,
+            align="center",
             fill=(
                 random.randint(32, 127),
                 random.randint(32, 127),
