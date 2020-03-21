@@ -157,7 +157,7 @@ def get_items(items) -> list:
     return result
 
 
-def captcha(size=4, width=240, height=60, font=None, font_size=36):
+def captcha(size=4, width=240, height=60, font=None, font_size=36, noise=True):
     """
     验证码
     @param width default: 240
@@ -166,16 +166,18 @@ def captcha(size=4, width=240, height=60, font=None, font_size=36):
     image = Image.new("RGB", (width, height), (255, 255, 255))
     font = ImageFont.truetype(font=font if font else "./Arial.ttf", size=font_size)
     draw = ImageDraw.Draw(image)
-    for x in range(width):
-        for y in range(height):
-            draw.point(
-                (x, y),
-                fill=(
-                    random.randint(64, 255),
-                    random.randint(64, 255),
-                    random.randint(64, 255),
-                ),
-            )
+    if noise:
+        for x in range(width):
+            for y in range(height):
+                if random.randint(0, 1):
+                    draw.point(
+                        (x, y),
+                        fill=(
+                            random.randint(64, 255),
+                            random.randint(64, 255),
+                            random.randint(64, 255),
+                        ),
+                    )
     code = []
     remainder = width % size
     unit = int((width - remainder) / size)
@@ -188,7 +190,6 @@ def captcha(size=4, width=240, height=60, font=None, font_size=36):
             (unit * t + offset_x, y),
             c,
             font=font,
-            align="center",
             fill=(
                 random.randint(32, 127),
                 random.randint(32, 127),
