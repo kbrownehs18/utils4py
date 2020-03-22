@@ -1,2 +1,2 @@
-graft tests
-global-exclude *.ttf
+include utils4py/*.ttf
+include tests/*.py
