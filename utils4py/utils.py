@@ -11,6 +11,7 @@ import re
 import time
 from io import BytesIO
 
+from captcha.image import ImageCaptcha
 from Crypto import Random
 from Crypto.Cipher import AES
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
@@ -164,7 +165,12 @@ def captcha(size=4, width=240, height=60, font=None, font_size=36, noise=True):
     @param height default: 60
     """
     image = Image.new("RGB", (width, height), (255, 255, 255))
-    font = ImageFont.truetype(font=font if font else "./Arial.ttf", size=font_size)
+    font = ImageFont.truetype(
+        font=font
+        if font
+        else os.path.join(os.path.abspath(os.path.dirname(__file__)), "Arial.ttf"),
+        size=font_size,
+    )
     draw = ImageDraw.Draw(image)
     if noise:
         for x in range(width):
@@ -203,3 +209,14 @@ def captcha(size=4, width=240, height=60, font=None, font_size=36, noise=True):
     img_io.seek(0)
 
     return "".join(code), img_io
+
+
+def captcha2():
+    code = random_string(4)
+    image = ImageCaptcha().generate_image(code)
+
+    img_io = BytesIO()
+    image.save(img_io, "JPEG", quality=70)
+    img_io.seek(0)
+
+    return code, img_io

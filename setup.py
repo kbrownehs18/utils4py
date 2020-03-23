@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="utils4py",
-    version="0.0.16",
+    version="0.0.19",
     packages=find_packages(),
     include_package_data=True,
     url="https://github.com/kbrownehs18/utils4py",
@@ -11,5 +11,5 @@ setup(
     author="last911",
     author_email="scnjl@qq.com",
     description="Python tools",
-    install_requires=["sqlalchemy", "pycrypto", "flask-wtf", "pillow"],
+    install_requires=["sqlalchemy", "pycrypto", "flask-wtf", "pillow", "captcha"],
 )
