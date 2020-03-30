@@ -12,16 +12,17 @@ class TestUtils(unittest.TestCase):
     def test_utils(self):
         self.assertEqual("png" == utils.extension("image.png"), True)
 
-        self.assertEqual(utils.check_phone_number("13550009575"), True)
+        self.assertEqual(utils.check_phone_number("13000000000"), True)
 
     def test_aes(self):
-        content = "scnjl"
+        content = "jintian shige haotianqi buzhidao duibudui?"
         en = utils.encrypt(content)
         de = utils.decrypt(en)
         self.assertEqual(de == content, True)
 
-        en = utils.encrypt(content, key="abcde")
-        de = utils.decrypt(en, key="abcde")
+        key = utils.md5(str(time.time()))
+        en = utils.encrypt(content, key=key)
+        de = utils.decrypt(en, key=key)
         self.assertEqual(de == content, True)
 
         en = utils.encrypt(content, key="abcde", expires=-1)
