@@ -61,3 +61,26 @@ class Form(FlaskForm):
         """
         messages = get_items(self.errors)
         return None if not messages else messages[0]
+
+
+def validate(validate_form=None, upload=False):
+    """
+    form validate decorator
+    """
+
+    def form_check(fn):
+        def wrapper(*args, **kwargs):
+            form = validate_form(
+                data=request.args
+                if request.method == "GET"
+                else (get_json() if not upload else request.form)
+            )
+
+            if not form.validate():
+                return response(code=90001, msg=form.get_error_message())
+            kwargs.update({"form": form})
+            return fn(*args, **kwargs)
+
+        return wrapper
+
+    return form_check
