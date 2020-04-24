@@ -35,6 +35,19 @@ def md5(strs):
     return md5bytes(strs.encode(encoding="utf-8"))
 
 
+def sha256bytes(bs):
+    """
+    sha256
+    """
+    hash = hashlib.sha256()
+    hash.update(bs)
+    return hash.hexdigest()
+
+
+def sha256(strs):
+    return sha256bytes(strs.encode("utf-8"))
+
+
 def extension(filename):
     """
     file extension
