@@ -105,11 +105,14 @@ def random_string(len=5):
     return "".join(chars)
 
 
-pad = (
-    lambda s, key=True: s[0 : AES.block_size]
-    if key and len(s) >= AES.block_size
-    else s + (AES.block_size - len(s) % AES.block_size) * chr(0)
-)
+pad = lambda s: (s + (
+    AES.block_size
+    - (
+        16
+        if (len(s) % AES.block_size == 0 and len(s) != 0)
+        else (len(s) % AES.block_size)
+    )
+) * chr(0)).encode("utf-8")
 
 
 def encrypt(content, key="1234567890", expires=0):
@@ -121,7 +124,7 @@ def encrypt(content, key="1234567890", expires=0):
     """
     iv = Random.new().read(AES.block_size)
     cryptor = AES.new(pad(key), AES.MODE_CBC, iv)
-    ciphertext = cryptor.encrypt(pad(content, False))
+    ciphertext = cryptor.encrypt(pad(content))
 
     return base64.urlsafe_b64encode(
         iv
