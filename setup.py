@@ -11,5 +11,5 @@ setup(
     author="last911",
     author_email="scnjl@qq.com",
     description="Python tools",
-    install_requires=["sqlalchemy", "pycrypto", "flask-wtf", "pillow", "captcha"],
+    install_requires=["sqlalchemy", "pycryptodome", "flask-wtf", "pillow", "captcha"],
 )
