@@ -43,7 +43,7 @@ def response(code=0, data={}, msg="", http_code=200, **kwargs):
         rtn["msg"] = msg
 
     if kwargs:
-        rtn = rtn.update(kwargs)
+        rtn.update(kwargs)
 
     return jsonify(rtn), http_code
 
