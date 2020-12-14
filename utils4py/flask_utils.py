@@ -9,7 +9,7 @@ from flask_wtf import FlaskForm
 from wtforms.validators import StopValidation
 
 from .utils import get_items
-
+from decimal import Decimal
 
 class CustomJSONEncoder(JSONEncoder):
     """
@@ -22,6 +22,8 @@ class CustomJSONEncoder(JSONEncoder):
                 return obj.strftime("%Y-%m-%d %H:%M:%S")
             elif isinstance(obj, date):
                 return obj.strftime("%Y-%m-%d")
+            elif isinstance(obj, Decimal):
+                return float(obj)
             iterable = iter(obj)
         except TypeError:
             pass
