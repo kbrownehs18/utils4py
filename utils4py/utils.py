@@ -86,7 +86,7 @@ def model_to_dict(model):
     data = {}
     for col in model.__table__.columns:
         value = getattr(model, col.name)
-        if isinstance(col.type, DateTime) and isinstance(value, DateTime):
+        if isinstance(col.type, DateTime):
             value = convert_datetime(value)
         elif isinstance(col.type, Numeric):
             value = str(value)
