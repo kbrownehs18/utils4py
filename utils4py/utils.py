@@ -73,10 +73,15 @@ def model_to_dict(model):
     """
 
     def convert_datetime(value):
-        if value:
-            return value.strftime("%Y-%m-%d %H:%M:%S")
-        else:
-            return ""
+        return (
+            (
+                value.strftime("%Y-%m-%d %H:%M:%S")
+                if hasattr(value, "strftime")
+                else value
+            )
+            if value
+            else ""
+        )
 
     data = {}
     for col in model.__table__.columns:
@@ -105,21 +110,25 @@ def random_string(len=5):
     return "".join(chars)
 
 
-pad = lambda s: (s + (
-    AES.block_size
-    - (
-        16
-        if (len(s) % AES.block_size == 0 and len(s) != 0)
-        else (len(s) % AES.block_size)
+pad = lambda s: (
+    s
+    + (
+        AES.block_size
+        - (
+            16
+            if (len(s) % AES.block_size == 0 and len(s) != 0)
+            else (len(s) % AES.block_size)
+        )
     )
-) * chr(0)).encode("utf-8")
+    * chr(0)
+).encode("utf-8")
 
 
 def encrypt(content, key="1234567890", expires=0):
     """
     加密
     @param content 加密内容
-    @param key 
+    @param key
     @param expires 过期时间
     """
     iv = Random.new().read(AES.block_size)
