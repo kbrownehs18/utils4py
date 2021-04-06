@@ -7,6 +7,7 @@ import os
 import random
 import re
 import time
+import json
 
 from Crypto import Random
 from Crypto.Cipher import AES
@@ -176,3 +177,10 @@ def get_items(items) -> list:
     calculate(items)
     return result
 
+
+def json_encode(data):
+    return json.dumps(data, ensure_ascii=False)
+
+
+def json_decode(s):
+    return json.loads(s)
