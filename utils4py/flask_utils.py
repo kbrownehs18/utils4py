@@ -54,7 +54,7 @@ def get_json(force=True, silent=True, cache=True):
     """
     wrap flask request get_json
     """
-    return request.get_json(force=force, silent=silent, cache=cache)
+    return request.get_json(force=force, silent=silent, cache=cache) or {}
 
 
 class Form(FlaskForm):
