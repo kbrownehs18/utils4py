@@ -11,6 +11,7 @@ from wtforms.validators import StopValidation
 from .utils import get_items
 from decimal import Decimal
 
+
 class CustomJSONEncoder(JSONEncoder):
     """
     JSON Encoder format
@@ -54,7 +55,7 @@ def get_json(force=True, silent=True, cache=True):
     """
     wrap flask request get_json
     """
-    return request.get_json(force=force, silent=silent, cache=cache) or {}
+    return request.get_json(force=force, silent=silent, cache=cache)
 
 
 class Form(FlaskForm):
@@ -76,11 +77,12 @@ def validate(validate_form=None, upload=False):
             form = validate_form(
                 data=request.args
                 if request.method == "GET"
-                else (get_json() if not upload else request.form)
+                else ((get_json() or {}) if not upload else request.form)
             )
 
             if not form.validate():
                 return response(code=90001, msg=form.get_error_message())
+
             kwargs.update({"form": form})
             return fn(*args, **kwargs)
 
@@ -100,8 +102,9 @@ def form_validate(validate_form=None, methods=["POST"]):
                 return fn(*args, **kwargs)
 
             form = validate_form(
-                data=request.args if request.method == "GET" else get_json()
+                data=request.args if request.method == "GET" else (get_json() or {})
             )
+
             if not form.validate():
                 return response(code=999, msg=form.get_error_message())
 
