@@ -77,7 +77,7 @@ def validate(validate_form=None, upload=False):
             form = validate_form(
                 data=request.args
                 if request.method == "GET"
-                else ((get_json() or {}) if not upload else request.form)
+                else (get_json() if not upload else request.form)
             )
 
             if not form.validate():
@@ -102,7 +102,7 @@ def form_validate(validate_form=None, methods=["POST"]):
                 return fn(*args, **kwargs)
 
             form = validate_form(
-                data=request.args if request.method == "GET" else (get_json() or {})
+                data=request.args if request.method == "GET" else get_json()
             )
 
             if not form.validate():
