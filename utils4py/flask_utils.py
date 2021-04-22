@@ -74,11 +74,12 @@ def validate(validate_form=None, upload=False):
 
     def form_check(fn):
         def wrapper(*args, **kwargs):
-            form = validate_form(
-                data=request.args
+            data = (
+                request.args
                 if request.method == "GET"
                 else (get_json() if not upload else request.form)
             )
+            form = validate_form(data=data) if data else validate_form({})
 
             if not form.validate():
                 return response(code=90001, msg=form.get_error_message())
@@ -101,9 +102,8 @@ def form_validate(validate_form=None, methods=["POST"]):
             if request.method not in methods:
                 return fn(*args, **kwargs)
 
-            form = validate_form(
-                data=request.args if request.method == "GET" else get_json()
-            )
+            data = request.args if request.method == "GET" else get_json()
+            form = validate_form(data=data) if data else validate_form({})
 
             if not form.validate():
                 return response(code=999, msg=form.get_error_message())
