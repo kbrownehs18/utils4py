@@ -6,6 +6,7 @@ import time
 import unittest
 
 from utils4py import utils
+# from utils4py import captcha
 
 
 class TestUtils(unittest.TestCase):
@@ -61,10 +62,25 @@ class TestUtils(unittest.TestCase):
         ]
         print(utils.get_items(a))
     
-    def test_captcha(self):
-        r, img = utils.captcha()
+    # def test_captcha(self):
+    #     r, img = captcha.captcha()
 
-        print(r, img)
+    #     print(r, img)
+
+    def test_authcode(self):
+        text = "scnjl"
+        key = "1234567890"
+        print("-")
+        en = utils.authcode(text, False, key)
+        print(en)
+        t = utils.authcode(en, key=key)
+        print(t)
+
+        self.assertEqual(text, t)
+
+        a = utils.authcode("bddb6a0aXJucgl+S0rvKroPjF3Xccsv4ZuNAHScf+HVGkYcjyQ", key=key)
+        print(a)
+        self.assertEqual(a, "scnjl")
 
 
 if __name__ == "__main__":

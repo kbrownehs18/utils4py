@@ -86,7 +86,7 @@ def model_to_dict(model):
             value = convert_datetime(value)
         elif isinstance(col.type, Numeric):
             value = str(value)
-             
+
         data[col.name] = value
 
     return data
@@ -184,3 +184,83 @@ def json_encode(data):
 
 def json_decode(s):
     return json.loads(s)
+
+
+def authcode(text, decrypt=True, key="", expiry=0, ckey_length=0):
+    """
+    Discuz authcode
+    Default: Decrypt
+    """
+    # 动态密钥长度
+    ckey_length = ckey_length or 8
+    # 生成密钥
+    key = md5(
+        ("" if key == "nil" else key) if key else "abcdefghijklmnopqrstuvwxyz0123456789"
+    )
+    # 密钥A用于加密
+    key_a = md5(key[0:16])
+    # 密钥B用于验证
+    key_b = md5(key[16:])
+    # 密钥C，生成动态密码部分
+    # 解密的时候获取需要解密的字符串前面的ckey_length长度字符串
+    # 加密的时候，用当前时间戳的微妙数md5加密的最后ckey_length长度字符串
+    key_c = text[0:ckey_length] if decrypt else md5(str(time.time()))[-ckey_length:]
+    # 用于计算的密钥
+    crypt_key = key_a + md5(key_a + key_c)
+    key_length = len(crypt_key)
+
+    text = (
+        base64_decode(text[ckey_length:], "unicode-escape", errors="ignore")
+        if decrypt
+        else (
+            ("%010d" % ((int(time.time()) + expiry) if expiry else 0))
+            + md5(text + key_b)[0:16]
+            + text
+        )
+    )
+
+    text_length = len(text)
+    box = list(range(256))
+
+    result = ""
+    rndkey = [ord(crypt_key[i % key_length]) for i in range(256)]
+
+    j = 0
+    for i in range(256):
+        j = (j + box[i] + rndkey[i]) % 256
+        box[i], box[j] = box[j], box[i]
+
+    a, j = 0, 0
+    for i in range(text_length):
+        a = (a + 1) % 256
+        j = (j + box[a]) % 256
+        box[a], box[j] = box[j], box[a]
+        result += chr(ord(text[i]) ^ (box[(box[a] + box[j]) % 256]))
+
+    if decrypt:
+        t = int(result[0:10])
+        return (
+            result[26:]
+            if (t == 0 or (t - int(time.time())) > 0)
+            and result[10:26] == md5(result[26:] + key_b)[0:16]
+            else ""
+        )
+
+    return key_c + base64.b64encode(bytes([ord(c) for c in result])).decode()
+
+
+def base64_pad(text):
+    x = len(text) * 3 % 4
+    text += "=" * x if x in [1, 2] else ""
+
+    return text
+
+
+def base64_encode(text, encoding="utf-8", errors="strict"):
+    return base64.b64encode(text.encode(encoding, errors)).decode(encoding, errors)
+
+
+def base64_decode(text, encoding="utf-8", errors="strict"):
+    return base64.b64decode(base64_pad(text).encode(encoding, errors)).decode(
+        encoding, errors
+    )
