@@ -4,7 +4,7 @@
 from datetime import date, datetime
 
 from flask import jsonify, request
-from flask.json import JSONEncoder
+from json import JSONEncoder
 from flask_wtf import FlaskForm
 from wtforms.validators import StopValidation
 
